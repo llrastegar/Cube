@@ -6,6 +6,7 @@
 //and then include all the libraries/headers that we need to.
 typedef std::string String;
 
+//using "T" is not necessary, you could use "E" just as well
 template<class T>
 void out(T a) {
   std::cout<<a;

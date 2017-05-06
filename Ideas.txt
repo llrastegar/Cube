@@ -1,0 +1,6 @@
+Full list of ideas so far for the grand Cube project, whatever that is.
+
+	-- A compression algorithm that compresses down files that are not used often on your computer,
+	freeing up more disk space and reducing clutter.
+	-- Could morph into an algorithm that also sorts and organizes your files for you
+	-- Ultimately could turn into a cloud service.

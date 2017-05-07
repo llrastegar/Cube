@@ -16,7 +16,7 @@ int main() {
 	std::ifstream myfile; //do not declare as "ofstream" when only reading
 	String line;
 	std::vector<int>bitses; //could be booleans later
-	myfile.open ("tfile.txt", std::ios::binary); //std::ios::binary is optional
+	myfile.open ("ideas.txt", std::ios::binary); //std::ios::binary is optional
 	while (getline (myfile, line) ) {
 		lines.push_back(line);
 		outln(line);
@@ -60,7 +60,8 @@ int main() {
 
 		outln("the entire file content is in memory");
 		for (int i = 0; i<size; i++) {
-			outln(memblock[i]);
+			outln(((std::bitset<8>)memblock[i]).to_ulong());
+			//outln(((char)memblock[i]));
 		}
 		delete[] memblock;
 	}

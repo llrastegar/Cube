@@ -7,11 +7,11 @@ Full list of ideas so far for the grand Cube project, whatever that is.
 	
 	
 So far, we have come up with the following for the algorithm:
-	--Cocatenate everything into a very long string $s$ with length $n$.
-	--Iterate through the string 9, 10, 11, ... $n$ bytes at a time. Any often recurring patterns into a register,
-		and then using a yet-to-be-designed scoring algorithm determine which number of bytes
+	--Cocatenate everything into a very long string s with length n.
+	--Iterate through the string 9, 10, 11, ... n bytes at a time. Save any often recurring patterns into a register,
+		and then using a yet-to-be-designed scoring algorithm to determine which number of bytes
 		does the best job of compressing the data. Assign a character value (8 bits) to any of these
-		often recurring strings of binary, giving precedence to those strings that appear the most
+		often recurring strings of binary, giving precedence to those strings that appear the most.
 	--To compress everything, the output will be saved in a txt file with a certain key for each character and the length
 		of bit string each character represents.
 	--As we begin crunching more data, more characters and patterns will become obvious, to the point that we could

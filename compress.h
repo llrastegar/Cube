@@ -1,9 +1,16 @@
 #include <iostream>
+#include <fstream> //file io
+#include <vector>
+#include <bitset> //string->binary, probably has other functions
 //include only those libraries and files that are actually used in the header
 //all else should be put into compress.cpp
 //in case we build a class that handles i/o, we should put it into the header
 //and then include all the libraries/headers that we need to.
+
 typedef std::string String;
+
+const int CHAR_TO_INT = 48; //if you every convert a character to an integer,
+//you have to subtract this number from it
 
 //using "T" is not necessary, you could use "E" just as well
 template<class T>
@@ -25,17 +32,14 @@ void outlnend(T a) {
   //the programmer is completely finished outputing things.
 }
 
-#include <fstream> //file io
-#include <vector>
-#include <bitset> //string->binary, probably has other functions
 
-const int CHAR_TO_INT = 48; //if you every convert a character to an integer,
-//you have to subtract this number from it
 
 int filesize(const char* filename) {
 	std::ifstream in(filename, std::ios::binary | std::ios::ate);
 	return in.tellg();
 }
+
+
 
 class File {
 public:

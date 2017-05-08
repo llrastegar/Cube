@@ -32,14 +32,10 @@ void outlnend(T a) {
   //the programmer is completely finished outputing things.
 }
 
-
-
 int filesize(const char* filename) {
 	std::ifstream in(filename, std::ios::binary | std::ios::ate);
 	return in.tellg();
 }
-
-
 
 class File {
 public:
@@ -54,13 +50,18 @@ public:
 		contents = new char[0];
 	}
 	File(String fname) : name(fname) {
-		file.open(name, std::ios::in|std::ios::binary|std::ios::ate); //maybe not all necessary?
-		length = filesize(name.c_str()); //c_str makes a String or std::string into char*
-		type = name.substr(name.find_last_of("."));
-		contents = new char [length]; //length may totally blow up with gig sized files
-		file.seekg (0, std::ios::beg);
-		file.read (contents, length);
-		file.close();
+		file.open(name.c_str(), std::ios::in|std::ios::binary|std::ios::ate); //maybe not all necessary?
+		if( file.is_open()){
+			length = file.tellg();
+			type = name.substr(name.find_last_of(".")+1);
+			contents = new char [length]; //length may totally blow up with gig sized files
+			file.seekg (0, std::ios::beg);
+			file.read (contents, length);
+			file.close();
+		} else {
+			outln("file "+name+" not found");
+			contents = new char[0];
+		}
 	}
 	~File() {
 		delete[] contents; //for every "new" there must be a delete or else you clog memory

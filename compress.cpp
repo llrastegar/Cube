@@ -13,10 +13,25 @@ class file
 {
 public:
 	String name; //the name of the file
-	char * 
+	char * contents;
 	file() : name("") {
+		contents = new char[0];
 	}
 	file(String filename) : name(filename) {
+		std::ifstream myfile; //do not declare as "ofstream" when only reading
+		String line;
+		long size = 0;
+		myfile.open ("Ideas.txt", std::ios::binary | std::ios::in); //std::ios::binary is optional
+		if ( myfile.is_open() ) {
+			size = myfile.tellg();
+			contents = new char [size];
+			myfile.seekg (0, std::ios::beg);
+			myfile.read (contents, size);
+			myfile.close();
+			outln("the contents of " + name + " is in memory");
+		} else {
+			outln("Unable to open file");
+		}
 	}
 	void compress(){
 		outln(name + " compressed");
@@ -25,7 +40,7 @@ public:
 		outln(name + " decompressed");
 	}
 	~file(){
-
+		delete[] contents;
 	}
 	
 };

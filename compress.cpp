@@ -9,14 +9,37 @@ int filesizeInBytes(const char* filename) {
 	std::ifstream in(filename, std::ios::binary | std::ios::ate);
 	return in.tellg();
 }
+class file
+{
+public:
+	String name; //the name of the file
+	char * 
+	file() : name("") {
+	}
+	file(String filename) : name(filename) {
+	}
+	void compress(){
+		outln(name + " compressed");
+	}
+	void decompress(){
+		outln(name + " decompressed");
+	}
+	~file(){
 
+	}
+	
+};
 int main() {
+	file f("Ideas.txt");
+	f.compress();
+	return 0;
+	/*
 	std::vector<String> lines;
 	String fullbitset;
 	std::ifstream myfile; //do not declare as "ofstream" when only reading
 	String line;
 	std::vector<int>bitses; //could be booleans later
-	myfile.open ("ideas.txt", std::ios::binary); //std::ios::binary is optional
+	myfile.open ("Ideas.txt", std::ios::binary); //std::ios::binary is optional
 	while (getline (myfile, line) ) {
 		lines.push_back(line);
 		outln(line);
@@ -66,4 +89,30 @@ int main() {
 		delete[] memblock;
 	}
 	else outln("Unable to open file");
+	//*/
 }
+/*
+int filesizeInBytes(const char* filename) {
+	std::ifstream in(filename, std::ios::binary | std::ios::ate);
+	return in.tellg();
+}
+
+int main() {
+	std::ifstream myfile; //do not declare as "ofstream" when only reading
+	String line;
+	char * file;
+	myfile.open ("Ideas.txt", std::ios::binary | std::ios::in); //std::ios::binary is optional
+	if(myfile.is_open()){
+		file = new char[myfile.tellg()];
+		while(getline(myfile, line)){
+			//process each line
+			outln(line);
+		}
+		//outln(" "); out("filesize: "); outln(filesizeInBytes("tfile.txt"));
+		myfile.close();
+		delete[] file;
+	} else {
+		outln("failed to open");
+	}
+}
+*/

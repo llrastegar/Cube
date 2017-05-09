@@ -42,29 +42,32 @@ public:
 	//all public for now
 	String name;
 	String type;
-	long length;
+	unsigned long length; //we dont need a negative size
 	char *contents;
 	std::ifstream file;
-	String fullbitset; //not used for now
 	File() : name("") {
 		contents = new char[0];
+		length = 0;
+		type = "";
 	}
 	File(String fname) : name(fname) {
 		file.open(name.c_str(), std::ios::in|std::ios::binary|std::ios::ate); //maybe not all necessary?
-		if( file.is_open()){
+		if( file.is_open() ){
 			length = file.tellg();
 			type = name.substr(name.find_last_of(".")+1);
 			contents = new char [length]; //length may totally blow up with gig sized files
 			file.seekg (0, std::ios::beg);
 			file.read (contents, length);
-			file.close();
 		} else {
-			outln("file "+name+" not found");
+			outln("File " + name + " not found");
 			contents = new char[0];
+			length = 0;
+			type = "";
 		}
+		file.close();
 	}
 	~File() {
-		delete[] contents; //for every "new" there must be a delete or else you clog memory
+		delete[] contents;
 	}
 	String accessBinaryStringAtIndex(long i) {
 		//long datatype for now, may need to be long long

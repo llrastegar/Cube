@@ -11,6 +11,7 @@ typedef std::string String;
 
 const int CHAR_TO_INT = 48; //if you every convert a character to an integer,
 //you have to subtract this number from it
+const std::bitset<8> empty(0);
 
 //using "T" is not necessary, you could use "E" just as well
 template<class T>
@@ -70,13 +71,10 @@ public:
 	~File() {
 		delete[] contents;
 	}
-	std::bitset<8> operator[](long index){
-		return (std::bitset<8>)contents[index];
-	}
-	String accessBinaryStringAtIndex(long i) {
-		//long datatype for now, may need to be long long
-		if (i > length) return "Out of bounds!"; //later add a try/catch error statement
-		return ((std::bitset<8>)contents[i]).to_string(); //cast from char -> bitset<8> -> string
+	std::bitset<8> operator[](long i){
+		if ((i>0 && i > length) || (i < 0 && i < length * -1)) return empty;
+		if (i>=0) return ((std::bitset<8>)contents[i]);
+		else return ((std::bitset<8>)contents[length-1+i]);
 	}
 	void compress(){
 		outln(name + " compressed");

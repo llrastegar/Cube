@@ -22,7 +22,7 @@ template<class T>
 void outln(T a) {
   std::cout<<a<<'\n';
   //std::endl was not used because this "flushes" the stream
-  //This reduces performance and optimization
+  //This reduces time and optimizes the program
 }
 
 template<class T>
@@ -67,6 +67,7 @@ public:
 		file.close();
 	}
 	~File() {
+		if (file.is_open) file.close();
 		delete[] contents;
 	}
 	String accessBinaryStringAtIndex(long i) {

@@ -67,7 +67,7 @@ public:
 		file.close();
 	}
 	~File() {
-		if (file.is_open) file.close();
+		if (file.is_open()) file.close();
 		delete[] contents;
 	}
 	String accessBinaryStringAtIndex(long i) {

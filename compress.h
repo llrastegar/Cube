@@ -51,6 +51,7 @@ public:
 		type = "";
 	}
 	File(String fname) : name(fname) {
+
 		file.open(name.c_str(), std::ios::in|std::ios::binary|std::ios::ate); //maybe not all necessary?
 		if( file.is_open() ){
 			length = file.tellg();
@@ -68,6 +69,9 @@ public:
 	}
 	~File() {
 		delete[] contents;
+	}
+	std::bitset<8> operator[](long index){
+		return (std::bitset<8>)contents[index];
 	}
 	String accessBinaryStringAtIndex(long i) {
 		//long datatype for now, may need to be long long

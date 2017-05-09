@@ -69,7 +69,7 @@ public:
 		delete[] contents;
 	}
 	std::bitset<8> operator[](signed long i){
-		if ((i>=0 && i > length) || (i<0 && i < -1 * length)) {
+		if ((i>=0 && i > length) || (i<0 && i <= -1 * length)) { //0000
 			outln("WARNING: out of bounds");
 			return empty;
 		}

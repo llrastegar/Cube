@@ -14,5 +14,5 @@ int main() {
 	out("Name: "); outln(txtFile.name);
 	out("Type: "); outln(txtFile.type);
 	out("Size: "); outln(txtFile.length);
-	outlnend(txtFile[-1]); //-1 should be last char in file
+	outlnend(txtFile[-2]); //-1 should be last char in file
 }

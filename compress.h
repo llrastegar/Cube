@@ -46,13 +46,10 @@ public:
 	unsigned long length; //we dont need a negative size
 	char *contents;
 	std::ifstream file;
-	File() : name("") {
+	File() : name(""), length(0), type(""){
 		contents = new char[0];
-		length = 0;
-		type = "";
 	}
 	File(String fname) : name(fname) {
-
 		file.open(name.c_str(), std::ios::in|std::ios::binary|std::ios::ate); //maybe not all necessary?
 		if( file.is_open() ){
 			length = file.tellg();
@@ -71,10 +68,15 @@ public:
 	~File() {
 		delete[] contents;
 	}
-	std::bitset<8> operator[](long i){
-		if ((i>0 && i > length) || (i < 0 && i < length * -1)) return empty;
-		if (i>=0) return ((std::bitset<8>)contents[i]);
-		else return ((std::bitset<8>)contents[length-1+i]);
+	std::bitset<8> operator[](signed long i){
+		if ((i>=0 && i > length) || (i<0 && i < -1 * length)) {
+			outln("WARNING: out of bounds");
+			return empty;
+		}
+		if (i>=0)
+			return (std::bitset<8>)contents[i];
+		else
+			return (std::bitset<8>)contents[length+i]; //contents[-1] should equal last char in file
 	}
 	void compress(){
 		outln(name + " compressed");

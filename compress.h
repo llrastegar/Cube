@@ -9,31 +9,33 @@
 
 typedef std::string String;
 
-const int CHAR_TO_INT = 48; //if you every convert a character to an integer,
+const unsigned int CHAR_TO_INT = 48; //if you every convert a character to an integer,
 //you have to subtract this number from it
 
 //using "T" is not necessary, you could use "E" just as well
 template<class T>
-void out(T a) {
+void out(const T a) {
   std::cout<<a;
 }
 
 template<class T>
-void outln(T a) {
+void outln(const T a) {
   std::cout<<a<<'\n';
   //std::endl was not used because this "flushes" the stream
   //This reduces time and optimizes the program
 }
 
 template<class T>
-void outlnend(T a) {
+void outlnend(const T a) {
   std::cout<<a<<std::endl;
   //here it is used so that the programmer can flush and end the stream in case
   //the programmer is completely finished outputing things.
 }
 
+//Pre-condition: the file actually exists
 int filesize(const char* filename) {
 	std::ifstream in(filename, std::ios::binary | std::ios::ate);
+	if (!in.is_open()) return -1;
 	return in.tellg();
 }
 
@@ -50,7 +52,7 @@ public:
 		length = 0;
 		type = "";
 	}
-	File(String fname) : name(fname) {
+	File(const String fname) : name(fname) {
 		file.open(name.c_str(), std::ios::in|std::ios::binary|std::ios::ate); //maybe not all necessary?
 		if( file.is_open() ){
 			length = file.tellg();
@@ -70,7 +72,7 @@ public:
 		if (file.is_open()) file.close();
 		delete[] contents;
 	}
-	String accessBinaryStringAtIndex(long i) {
+	String accessBinaryStringAtIndex(const long i) {
 		//long datatype for now, may need to be long long
 		if (i > length) return "Out of bounds!"; //later add a try/catch error statement
 		return ((std::bitset<8>)contents[i]).to_string(); //cast from char -> bitset<8> -> string

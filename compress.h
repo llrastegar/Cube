@@ -79,6 +79,10 @@ public:
 			return (std::bitset<8>)contents[length+i]; //contents[-1] should equal last char in file
 	}
 	void compress(){
+		for(long i=0;i<length;i++){
+			out(contents[i]);
+		}
+		outln("");
 		outln(name + " compressed");
 	}
 	void decompress(){

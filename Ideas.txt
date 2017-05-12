@@ -18,6 +18,16 @@ So far, we have come up with the following for the algorithm:
 		hardcode certain things into the dictionary that pairs characters with full bit strings.
 
 To-Do:
-	Clean up the code so that implementation is most easy
 	Come up with the scoring mechanism
 	Come up with the best way to store keys in files--this takes memory too!
+	
+	
+	
+	
+Scoring mechanism:
+	Consider a cache of the total amount of different non-overlaping patterns that were recorded. Call this amount p.
+	Consider the amount of times each pattern is recorded, r_i, where is i the index.
+	Then the scoring function must be:
+	(Sum from i = 1 to p of r_i) / p - (p/file_length)
+	Explanation: We sum up the total amount of repetitions of patterns and divide it by p to find the most amount of repetitions
+		relatively little patterns. Then we make sure that the file size compensates for large p in the subtracted term.

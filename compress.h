@@ -9,6 +9,7 @@
 #include <boost/dynamic_bitset.hpp>
 
 typedef std::string String;
+typedef boost::dynamic_bitset<> dbitset;
 
 const int CHAR_TO_INT = 48; //if you every convert a character to an integer,
 //you have to subtract this number from it
@@ -34,10 +35,6 @@ void outlnend(T a) {
   //the programmer is completely finished outputing things.
 }
 
-int filesize(const char* filename) {
-	std::ifstream in(filename, std::ios::binary | std::ios::ate);
-	return in.tellg();
-}
 class key
 {
 public:
@@ -56,43 +53,54 @@ public:
 };
 class File {
 public:
-	//all public for now
 	String name;
 	String type;
-	unsigned long length; //we dont need a negative size
-	char *contents;
+	unsigned long length; //# of chars in file
+	boost::dynamic_bitset<> binary;
 	std::ifstream file;
 	File() : name(""), length(0), type(""){
-		contents = new char[0];
+		binary = dbitset(0);
 	}
 	File(String fname) : name(fname) {
-		file.open(name.c_str(), std::ios::in|std::ios::binary|std::ios::ate); //maybe not all necessary?
+		file.open(name.c_str(), std::ios::in|std::ios::ate); //maybe not all necessary?
 		if( file.is_open() ){
-			length = file.tellg();
 			type = name.substr(name.find_last_of(".")+1);
-			contents = new char [length]; //length may totally blow up with gig sized files
-			file.seekg (0, std::ios::beg);
-			file.read (contents, length);
+			length = file.tellg(); //set length of the file
+			binary = dbitset(length * 8); //make binary the correct size
+			char c;
+			file.seekg(0, std::ios::beg);
+			for(long i=0;i<length;i++){
+				file.get(c);
+				for(int b=0;b<8;b++){
+					binary[i*8+b] = (c>>(7-b)) & 1;
+				}
+			}
 		} else {
 			outln("File " + name + " not found");
-			contents = new char[0];
 			length = 0;
 			type = "";
+			binary = dbitset(0);
 		}
 		file.close();
 	}
-	~File() {
-		delete[] contents;
-	}
-	std::bitset<8> operator[](signed long i){
-		if ((i>=0 && i > length) || (i<0 && i < -1 * length)) { //0000
+	bool operator[](signed long i){
+		if ((i>=0 && i > length) || (i<0 && i < -1 * length)) {
 			outln("WARNING: out of bounds");
-			return empty;
+			return false;
 		}
 		if (i>=0)
-			return (std::bitset<8>)contents[i];
+			return (bool)binary[i];
 		else
-			return (std::bitset<8>)contents[length+i]; //contents[-1] should equal last char in file
+			return (bool)binary[length*8+i];
+	}
+	void print(){
+		std::bitset<8> c;
+		for(unsigned long i=0;i<length;i++){
+			for(int j=0;j<8;j++){
+				c.set(7-j, binary[i*8+j]);
+			}
+			out((char)(c.to_ulong()));
+		}
 	}
 	void compress(){
 		for(char id=48;id<123;id++){ //limit on the # of keys (range) for now

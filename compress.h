@@ -11,33 +11,29 @@
 typedef std::string String;
 typedef boost::dynamic_bitset<> dbitset;
 
-const int CHAR_TO_INT = 48; //if you every convert a character to an integer,
-//you have to subtract this number from it
-const std::bitset<8> empty(0);
-
 //using "T" is not necessary, you could use "E" just as well
 template<class T>
 void out(T a) {
-  std::cout<<a;
+  std::cout << a;
 }
 template<class T>
 void outf(String s, T a) { //formated out, replace first '*' with a else just put a after s
-	if((signed)s.find("*") >=0)
-  		std::cout<<s.substr(0,s.find("*"))<<a<<s.substr(s.find("*")+1)<<"\n";
+	if((signed)s.find("*") >= 0)
+  		std::cout << s.substr(0, s.find("*")) << a << s.substr(s.find("*") + 1) << '\n';
   	else
-  		std::cout<<s<<a<<"\n";
+  		std::cout << s << a << "\n";
 }
 
 template<class T>
 void outln(T a) {
-  std::cout<<a<<'\n';
+  std::cout << a <<'\n';
   //std::endl was not used because this "flushes" the stream
   //This reduces performance and optimization
 }
 
 template<class T>
 void outlnend(T a) {
-  std::cout<<a<<std::endl;
+  std::cout << a << std::endl;
   //here it is used so that the programmer can flush and end the stream in case
   //the programmer is completely finished outputting things.
 }
@@ -101,7 +97,7 @@ public:
 	void print(){
 		std::bitset<8> c;
 		for(unsigned long i = 0; i < length; i++){
-			for(int j = 0;j < 8; j++){
+			for(int j = 0; j < 8; j++){
 				c.set(7 - j, binary[i * 8 + j]);
 			}
 			out( (char)(c.to_ulong()) );

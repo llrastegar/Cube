@@ -15,6 +15,4 @@ int main() {
 	outf("Type: *", txtFile.type);
 	outf("Size: * bytes", txtFile.length);
 	txtFile.print();
-	out(txtFile[txtFile.length*-8]);
-
 }

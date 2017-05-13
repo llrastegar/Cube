@@ -89,7 +89,7 @@ public:
 		file.close();
 	}
 	bool operator[](signed long i){
-		if ((i >= 0 && i > length * 8) || (i < 0 && i < length * -8)) {
+		if ((i >= (signed)length * 8) || (i < (signed)length * -8)) {
 			outln("WARNING: out of bounds");
 			return false;
 		}

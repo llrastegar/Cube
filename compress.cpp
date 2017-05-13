@@ -14,6 +14,6 @@ int main() {
 	outf("Name: *", txtFile.name);
 	outf("Type: *", txtFile.type);
 	outf("Size: * bytes", txtFile.length);
-	//txtFile.print();
+	txtFile.print();
 
 }

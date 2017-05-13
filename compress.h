@@ -20,6 +20,13 @@ template<class T>
 void out(T a) {
   std::cout<<a;
 }
+template<class T>
+void outf(String s, T a) { //formated out, replace first '*' with a else just put a after s
+	if((signed)s.find("*") >=0)
+  		std::cout<<s.substr(0,s.find("*"))<<a<<s.substr(s.find("*")+1)<<"\n";
+  	else
+  		std::cout<<s<<a<<"\n";
+}
 
 template<class T>
 void outln(T a) {
@@ -38,7 +45,7 @@ void outlnend(T a) {
 class key
 {
 public:
-	std::bitset<8> id; //8 bit id string
+	std::bitset<8> id; //for now a 8 bit id string
 	boost::dynamic_bitset<> value; //contains the binary value identified by id
 	key(){
 		id = std::bitset<8> (0);
@@ -84,7 +91,7 @@ public:
 		file.close();
 	}
 	bool operator[](signed long i){
-		if ((i>=0 && i > length) || (i<0 && i < -1 * length)) {
+		if ((i>=0 && i > length*8) || (i<0 && i < -1 * length*8)) {
 			outln("WARNING: out of bounds");
 			return false;
 		}
@@ -101,12 +108,10 @@ public:
 			}
 			out((char)(c.to_ulong()));
 		}
+		outlnend("");
 	}
 	void compress(){
-		for(char id=48;id<123;id++){ //limit on the # of keys (range) for now
-			//go through file and check for a binary string equal to that of the id
-				//for each found string compare the bits comming after and push that into the key value
-				//remove the common bits after each id string, leaving the id bits in for decompress
+		for(char id=48;id<123;id++){ 
 		}
 		outln(name + " compressed");
 	}

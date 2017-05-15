@@ -10,3 +10,7 @@ else
 	echo "Running ..."
 	./a.out
 fi;
+
+# Note that this will pipe the final exe into "a.out"
+# Notice the whitespace everywhere
+# Change the -std=c++11 to something else should we need newer and newer features

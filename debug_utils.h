@@ -1,4 +1,5 @@
 #include <iostream>
+#pragma once //only allows one include
 //using "T" is not necessary, you could use "E" just as well
 template<class T>
 void out(T a) {

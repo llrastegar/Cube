@@ -1,4 +1,4 @@
-#include "Compress.h"
+#include "compress.h"
 //#include "dynamic_bitset.h"
 
 //room for the compression algorithm and other classes

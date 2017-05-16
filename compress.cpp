@@ -16,4 +16,5 @@ int main() {
 	outf("Size: * bytes", txtFile.length);
 	txtFile.print();*/
 	Compress c("Ideas.txt");
+	c.shrink();
 }

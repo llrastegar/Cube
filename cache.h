@@ -30,8 +30,7 @@ public:
 	Cache(std::vector<Entry> e) : entries(e), length(e[0].length) {} //assume that all entries
 	//have the same length, eventually guard for the possibility that this isn't true
 	Entry calculateTotalScoreForEntries() {
-		Entry e;
-		return e;
+		return Entry();
 	} //find the max score of the entries
 	//and return a COPY of that entry
 };

@@ -5,6 +5,8 @@
 
 typedef std::string String;
 
+typedef std::vector<bool> bitstring;
+
 class File {
 private:
 	std::ifstream file;
@@ -15,7 +17,7 @@ public:
 	String name; //path to file (name)
 	String type; //file extension
 	unsigned long length; //# of chars in file
-	std::vector<bool> binary; //binary contents of the file
+	bitstring binary; //binary contents of the file
 
 	File() : name(""), length(0), type(""){}
 
@@ -39,11 +41,11 @@ public:
 		}
 		file.close();
 	}
-	std::vector<bool> substr(long start){
+	bitstring substr(long start){
 		return substr(start, binary.size());
 	}
-	std::vector<bool> substr(long start, long end){
-		std::vector<bool> v;
+	bitstring substr(long start, long end){
+		bitstring v;
 		for(long i = start; i < end; i++){
 			v.push_back(binary[i]);
 		}

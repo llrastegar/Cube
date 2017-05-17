@@ -50,6 +50,66 @@ public:
 		}
 		return v;
 	}
+	int getNumRepeat(bitstring b){ //returns the number of times the bitstring repeats(no overlap)
+		int count = 0;
+		for(long i = 0; i < binary.size()-b.size(); i++){
+			if( substr(i,i+b.size()) == b ){
+				count++;
+				i+= b.size()-1;
+			}
+		}
+		return count;
+	}
+	bool has2(bitstring b){ //returns the number of times the bitstring repeats(no overlap)
+		bool first = false;
+		for(long i = 0; i < binary.size() - b.size(); i++){
+			if( substr(i, i + b.size()) == b ){ //== checks length then members of a vector for equality
+				if(first)
+					return true;
+				first = true;
+				i+= b.size()-1;
+			}
+		}
+		return false;
+	}
+	std::vector<bitstring> getRepeatingBitstrings(bitstring seed){
+		std::vector<bitstring> bits;
+		bits.push_back(seed);
+		bitstring b;
+		/*b.push_back(false);
+		bits.push_back(b);
+		b.clear();
+		b.push_back(true);
+		bits.push_back(b);
+		b.clear();*/
+		for(long i = 0; i < bits.size(); i++){
+			/*if(i%1000 ==0)
+				outlnend(bits.size());
+				*/
+			if(bits.size() > 100){
+				return bits;
+			}
+			b = bits[i];
+			b.push_back(false);
+			if( has2(b) ){
+				bits.push_back(b);
+				/*for(int j=0;j<b.size();j++){
+					out(b[j]);
+				}
+				outlnend("");*/
+			}
+			b.pop_back(); //remove last element
+			b.push_back(true);
+			if( has2(b) ){
+				bits.push_back(b);
+				/*for(int j=0;j<b.size();j++){
+					out(b[j]);
+				}
+				outlnend("");*/
+			}
+		}
+		return bits;
+	}
 	void print(){
 		std::bitset<8> c;
 		for(unsigned long i = 0; i < length; i++){

@@ -1,6 +1,6 @@
 #include "file.h"
 #include "debug_utils.h"
-#include <bitset>
+#pragma once
 class Compress
 {
 public:

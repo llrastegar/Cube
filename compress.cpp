@@ -1,4 +1,5 @@
 #include "compress.h"
+#include "cache.h"
 //#include "dynamic_bitset.h"
 
 //room for the compression algorithm and other classes
@@ -15,6 +16,6 @@ int main() {
 	outf("Type: *", txtFile.type);
 	outf("Size: * bytes", txtFile.length);
 	txtFile.print();*/
-	Compress c("Ideas.txt");
-	c.shrink();
+	//Compress c("Ideas.txt");
+	Cache a();
 }

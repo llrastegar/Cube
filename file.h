@@ -2,9 +2,8 @@
 #include <fstream> //file io
 #include <vector>
 #include <bitset>
-
+#pragma once
 typedef std::string String;
-
 typedef std::vector<bool> bitstring;
 
 class File {

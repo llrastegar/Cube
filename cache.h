@@ -15,16 +15,13 @@ class Entry {
 public:
 	bitstring binary;
 	unsigned long score;
-	unsigned long phase;
+	unsigned long index;
 	unsigned long length;
 	Entry() {}
-	Entry(bitstring string, int p=0) : binary(string), phase(p), length(string.size()) {}
+	Entry(bitstring string, unsigned long i = 0) : binary(string), index(i), length(string.size()) {}
 	int calculateRelativeScore() { return 0; } //use the calculate score function described
 	//in Ideas.txt. If you find a problem, bring it up and fix it
 };
-
-
-
 class Cache {
 public:
 	std::vector<Entry> entries;
@@ -32,6 +29,9 @@ public:
 	Cache() {}
 	Cache(std::vector<Entry> e) : entries(e), length(e[0].length) {} //assume that all entries
 	//have the same length, eventually guard for the possibility that this isn't true
-	Entry calculateTotalScoreForEntries() { return 0; } //find the max score of the entries
+	Entry calculateTotalScoreForEntries() {
+		Entry e;
+		return e;
+	} //find the max score of the entries
 	//and return a COPY of that entry
 };

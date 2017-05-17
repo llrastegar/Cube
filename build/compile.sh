@@ -1,12 +1,21 @@
 #!/bin/bash
+
+check_for_compile_success() {
+	if g++ -std=c++11 compress.cpp -o a.out; then 
+		echo "Success";
+	else 
+		echo "Failure"; 
+	fi
+}
+
 echo "Compile or compile and run? (c/r)"
 read r
 if [ "$r" = "c" ]; then
 	echo "Compiling ... "
-	g++ -std=c++11 compress.cpp -o compress
+    check_for_compile_success
 else
 	echo "Compiling ..."
-	g++ -std=c++11 compress.cpp -o compress
+	check_for_compile_success
 	echo "Running ..."
 	./compress
 fi;

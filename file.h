@@ -41,33 +41,29 @@ public:
 		file.close();
 	}
 	bitstring substr(long start){
-		return substr(start, binary.size());
+		return bitstring(binary.begin()+start, binary.end());
 	}
 	bitstring substr(long start, long end){
-		bitstring v;
-		for(long i = start; i < end; i++){
-			v.push_back(binary[i]);
-		}
-		return v;
+		return bitstring(binary.begin()+start, binary.begin()+end);
 	}
 	int getNumRepeat(bitstring b){ //returns the number of times the bitstring repeats(no overlap)
 		int count = 0;
-		for(long i = 0; i < binary.size()-b.size(); i++){
-			if( substr(i,i+b.size()) == b ){
+		for(long i = 0; i < binary.size() - b.size(); i++){
+			if( substr(i, i + b.size()) == b ){
 				count++;
-				i+= b.size()-1; //no overlap
+				i+= b.size() - 1; //no overlap
 			}
 		}
 		return count;
 	}
-	bool has2(bitstring b){ //returns the number of times the bitstring repeats(no overlap)
+	bool has2(bitstring b){
 		bool first = false;
 		for(long i = 0; i < binary.size() - b.size(); i++){
 			if( substr(i, i + b.size()) == b ){ //== checks length then members of a vector for equality
 				if(first)
 					return true;
 				first = true;
-				i+= b.size()-1; //no overlap
+				i+= b.size() - 1; //no overlap
 			}
 		}
 		return false;
@@ -76,39 +72,35 @@ public:
 		std::vector<bitstring> bits;
 		bits.push_back(seed);
 		bitstring b;
-		/*b.push_back(false);
+		/*
+		b.push_back(false);
 		bits.push_back(b);
 		b.clear();
 		b.push_back(true);
 		bits.push_back(b);
-		b.clear();*/
+		b.clear();
+		//*/
 		for(long i = 0; i < bits.size(); i++){
-			/*if(i%1000 ==0)
-				outlnend(bits.size());
-				*/
-			if(bits.size() > 100){
+			if(bits.size() > 10000){ //timeout if
 				return bits;
 			}
 			b = bits[i];
 			b.push_back(false);
 			if( has2(b) ){
 				bits.push_back(b);
-				/*for(int j=0;j<b.size();j++){
+				for(int j=0;j<b.size();j++){
 					out(b[j]);
 				}
-				outlnend("");*/
+				outlnend("");
 			}
-			b.pop_back(); //remove last element
-			b.push_back(true); //doesn't this give precedence to "true"
-			//for instance, if you push back both false and true,
-			//the next iteration will initialize b with the true value, not both
-			//potentially leaving out the optimal one
+			b.pop_back();
+			b.push_back(true);
 			if( has2(b) ){
 				bits.push_back(b);
-				/*for(int j=0;j<b.size();j++){
+				for(int j=0;j<b.size();j++){
 					out(b[j]);
 				}
-				outlnend("");*/
+				outlnend("");
 			}
 		}
 		return bits;

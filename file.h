@@ -55,7 +55,7 @@ public:
 		for(long i = 0; i < binary.size()-b.size(); i++){
 			if( substr(i,i+b.size()) == b ){
 				count++;
-				i+= b.size()-1;
+				i+= b.size()-1; //no overlap
 			}
 		}
 		return count;
@@ -67,7 +67,7 @@ public:
 				if(first)
 					return true;
 				first = true;
-				i+= b.size()-1;
+				i+= b.size()-1; //no overlap
 			}
 		}
 		return false;
@@ -99,7 +99,10 @@ public:
 				outlnend("");*/
 			}
 			b.pop_back(); //remove last element
-			b.push_back(true);
+			b.push_back(true); //doesn't this give precedence to "true"
+			//for instance, if you push back both false and true,
+			//the next iteration will initialize b with the true value, not both
+			//potentially leaving out the optimal one
 			if( has2(b) ){
 				bits.push_back(b);
 				/*for(int j=0;j<b.size();j++){

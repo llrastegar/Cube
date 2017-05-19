@@ -27,6 +27,7 @@ Compression Algo ideas:
 			remove the common bits after each id string, leaving the id bits in for decompress
 		drawbacks:
 			only works if there is a significant amount of data in common after each id
+			and that the id repeats often
 	----idea:
 		drawbacks:
 To-Do:

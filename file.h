@@ -9,6 +9,7 @@ typedef std::vector<bool> bitstring;
 class File {
 private:
 	std::ifstream file;
+	std::ofstream outfile;
 public:
 	/*
 	These variables should stay public
@@ -68,7 +69,8 @@ public:
 		}
 		return false;
 	}
-	std::vector<bitstring> getRepeatingBitstrings(bitstring seed){
+	std::vector<bitstring> getRepeatingBitstrings(bitstring seed, int number=100){
+		//will not return exactly "number" bitstrings
 		std::vector<bitstring> bits;
 		bits.push_back(seed);
 		bitstring b;
@@ -81,26 +83,30 @@ public:
 		b.clear();
 		//*/
 		for(long i = 0; i < bits.size(); i++){
-			if(bits.size() > 10000){ //timeout if
+			if(bits.size() >= number){ //timeout
 				return bits;
 			}
 			b = bits[i];
 			b.push_back(false);
 			if( has2(b) ){
 				bits.push_back(b);
+				/*
 				for(int j=0;j<b.size();j++){
 					out(b[j]);
 				}
 				outlnend("");
+				//*/
 			}
 			b.pop_back();
 			b.push_back(true);
 			if( has2(b) ){
 				bits.push_back(b);
+				/*
 				for(int j=0;j<b.size();j++){
 					out(b[j]);
 				}
 				outlnend("");
+				//*/
 			}
 		}
 		return bits;
@@ -114,5 +120,20 @@ public:
 			out( (char)(c.to_ulong()) );
 		}
 		outlnend("");
+	}
+	void close(){ //write the file to storage, will create new file if none exists
+		outfile.open(name.substr(0, name.find_last_of(".")) + ".compress", std::ofstream::out);
+		if( outfile.is_open() ){
+			std::bitset<8> c;
+			for(unsigned long i = 0; i < length; i++){
+				for(int j = 0; j < 8; j++){
+					c.set(7 - j, binary[i * 8 + j]);
+				}
+				outfile.put( (char)(c.to_ulong()) );
+			}
+		} else {
+			outlnend("error writing file");
+		}
+		outfile.close();
 	}
 };

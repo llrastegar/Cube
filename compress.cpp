@@ -6,18 +6,18 @@
 
 
 int main() {
-	//*
+	/*
 	File mp3File("sound.mp3");
-	outf("Name: ", mp3File.name);
-	outf("Type: ", mp3File.type);
-	outf("Size: * bytes", mp3File.length);
+	outf("Name: *\n", mp3File.name);
+	//outf("Type: *\n", mp3File.type);
+	//outf("Size: * bytes\n", mp3File.length);
 	//*/
 
-	/*
+	//*
 	File txtFile("Ideas.txt");
-	outf("Name: *", txtFile.name);
-	outf("Type: *", txtFile.type);
-	outf("Size: * bytes", txtFile.length);
+	outf("Name: *\n", txtFile.name);
+	outf("Type: *\n", txtFile.type);
+	outf("Size: * bytes\n", txtFile.length);
 	//*/
 
 	/*
@@ -27,28 +27,17 @@ int main() {
 	outlnend("");
 	return 0;
 	//*/
-
-	bitstring b; //the seed bitstring
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	b.push_back(false);
-	std::vector<bitstring> v = mp3File.getRepeatingBitstrings(b);
+	txtFile.close();
 	/*
-	for(int i=0;i<v.size();i++){
-		for(int j=0;j<v[i].size();j++){
-			out(v[i][j]);
-		}
-		outln("");
-	}
+	bitstring seed; //the seed bitstring
+	seed.push_back(true);
+	seed.push_back(true);
+	seed.push_back(true);
+	seed.push_back(true);
+	//*/
+	/*/
+	outlnend("Finding repeating bitstrings");
+	std::vector<bitstring> v = mp3File.getRepeatingBitstrings(seed, 100);
 	//*/
 	
 }

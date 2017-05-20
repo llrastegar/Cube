@@ -132,6 +132,14 @@ public:
 					outfile.put( (char)(c.to_ulong()) );
 				}
 			}
+			if(binary.size() % 8 != 0){
+				//TODO: tell the header the # of extra bits
+				//set remaining bits in c to zero and write to file
+				for(int i = binary.size() % 8; i < 8; i++){
+					c.set(7 - i, false);
+				}
+				outf("extra * bits in file", binary.size() % 8);
+			}
 		} else {
 			outlnend("error writing file"); //never runs?
 		}

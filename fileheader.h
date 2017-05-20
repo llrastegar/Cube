@@ -5,12 +5,8 @@ class fileheader
 {
 public:
 	/* header format?
-	HEADER
 		3 bits <extrabits>
-		n bits <keys>
-	END OF HEADER
-		n bits data
-
+		5 bits (reserved for later improvement)
 	*/
 	unsigned short extrabits; //# of extra bits at the end of the file
 	//some sort of vector to store keys? do we want to store keys in the header?

@@ -24,14 +24,6 @@ bool checkLength(bitstring a, bitstring b) {
 	return a.size()==b.size();
 }
 
-bool compareBitstrings(bitstring one, bitstring two) {
-	if (!checkLength(one, two)) return false;
-	for (int i = 0; i<one.size(); i++) {
-		if (one[i]!=two[i]) return false;
-	}
-	return true;
-}
-
 class EntryPair {
 public:
 	bitstring a;
@@ -48,10 +40,10 @@ public:
 		}
 	}
 	bool operator == (const EntryPair &com) {
-		return compareBitstrings(a, com.a) && compareBitstrings(b, com.b);
+		return a == com.a && b == com.b;
 	}
 	bool operator |= (const EntryPair &com) {
-		return *this==com && (compareBitstrings(a, com.b) && compareBitstrings(b, com.a));
+		return *this == com || a == com.b && b == com.a;
 	}
 	bitstring getFullBitstring(bool ord=true, bool id=false) {
 		bitstring resultant;

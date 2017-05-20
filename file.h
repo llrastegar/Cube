@@ -9,8 +9,11 @@ typedef std::vector<bool> bitstring;
 
 class File {
 private:
+	//fileIO
 	std::ifstream file;
 	std::ofstream outfile;
+	//header
+	short extrabits;
 public:
 	/*
 	These variables should stay public
@@ -23,6 +26,12 @@ public:
 	File() : name(""), length(0), type(""){}
 
 	File(String fname) : name(fname) {
+		/*TODO:
+			make issue for Lucas to solve
+			read in for compressed files
+			make a header file that holds all possible keys
+
+		*/
 		//open file with cursor at the end (ate)
 		file.open(name.c_str(), std::ios::in|std::ios::ate);
 		if( file.is_open() ){
@@ -122,23 +131,57 @@ public:
 		}
 		outlnend("");
 	}
+	void open(String filename) {
+		name = filename;
+		//open file with cursor at the end (ate)
+		file.open(name.c_str(), std::ios::in|std::ios::ate);
+		if( file.is_open() ){
+			type = name.substr(name.find_last_of(".") + 1);
+			if(type == "compress"){
+				outln("you opened a compressed file");
+				//TODO: read in the compressed file
+			} else {
+				length = file.tellg();
+				file.seekg(0, std::ios::beg);
+				char c;
+				while( file.get(c) ){
+					for(int b = 0; b < 8; b++){
+						binary.push_back(c >> (7 - b) & 1);
+					}
+				}
+			}
+		} else {
+			outln("File " + name + " not found");
+			length = 0;
+			type = "";
+		}
+		file.close();
+	}
 	void close(){ //write the file to storage, will create new file if none exists
 		outfile.open(name + ".compress", std::ofstream::out);
 		if( outfile.is_open() ){
 			std::bitset<8> c;
+			extrabits = binary.size() % 8;
+			//write file header, first 3 bits are the extra bits, next 5 are unused
+			c.set(7, extrabits >> 2 & 1);
+			c.set(6, extrabits >> 1 & 1);
+			c.set(5, extrabits & 1);
+			outfile.put( (char)(c.to_ulong()) );
+			//write data to file
 			for(unsigned long long i = 0; i < binary.size(); i++) {
 				c.set(7 - (i % 8), binary[i]);
 				if(i % 8 == 7) {
 					outfile.put( (char)(c.to_ulong()) );
 				}
 			}
+			//write extra bits
 			if(binary.size() % 8 != 0){
-				//TODO: tell the header the # of extra bits
 				//set remaining bits in c to zero and write to file
 				for(int i = binary.size() % 8; i < 8; i++){
 					c.set(7 - i, false);
 				}
-				outf("extra * bits in file", binary.size() % 8);
+				outf("extra * bits in file", extrabits);
+				outlnend();
 			}
 		} else {
 			outlnend("error writing file"); //never runs?

@@ -25,6 +25,17 @@ class EntryPair {
 public:
 	bitstring a;
 	bitstring b;
+	EntryPair() {}
+	EntryPair(bitstring ar, bitstring br) {
+		if (ar.size()==br.size()) {
+			for (int i = 0; i<ar.size(); i++) {
+				a.push_back(ar[i]);
+				b.push_back(br[i]);
+			}
+		} else {
+			outln("Warning! Bitstrings not the same length!");
+		}
+	}
 	bool operator == (const EntryPair &com) {
 		return compareBitstrings(a, com.a) && compareBitstrings(b, com.b);
 	}
@@ -33,13 +44,13 @@ public:
 	}
 	bitstring getFullBitstring(bool ord=true, bool id=false) {
 		bitstring resultant;
-		resultant.push_back(ord); resultant.push_back(id);
 		for (int i = 0; i<a.size(); i++) {
 			resultant.push_back(a[i]);
 		}
 		for (int i = 0; i<b.size(); i++) {
 			resultant.push_back(b[i]);
 		}
+		resultant.push_back(ord); resultant.push_back(id);
 		return resultant;
 	}
 };
@@ -48,9 +59,18 @@ struct Key {
 	bitstring key;
 	EntryPair ab;
 	EntryPair cd;
-	bool first_second;
 	Key() {}
 	Key(bitstring k, EntryPair a, EntryPair c) : key(k), ab(a), cd(c) {}
+	bitstring getFullBitstring(bool which=true) {
+		bitstring resultant, insert;
+		if (which)
+			insert = ab.getFullBitstring();
+		else
+			insert = cd.getFullBitstring();
+		resultant.insert(resultant.end(), insert.begin(), insert.end());
+		resultant.push_back(which);
+		return resultant;
+	}
 };
 
 

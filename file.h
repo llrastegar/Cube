@@ -1,4 +1,5 @@
 #include "debug_utils.h"
+#include "fileheader.h"
 #include <fstream> //file io
 #include <vector>
 #include <bitset>
@@ -122,17 +123,17 @@ public:
 		outlnend("");
 	}
 	void close(){ //write the file to storage, will create new file if none exists
-		outfile.open(name.substr(0, name.find_last_of(".")) + ".compress", std::ofstream::out);
+		outfile.open(name + ".compress", std::ofstream::out);
 		if( outfile.is_open() ){
 			std::bitset<8> c;
-			for(unsigned long i = 0; i < length; i++){
-				for(int j = 0; j < 8; j++){
-					c.set(7 - j, binary[i * 8 + j]);
+			for(unsigned long long i = 0; i < binary.size(); i++) {
+				c.set(7 - (i % 8), binary[i]);
+				if(i % 8 == 7) {
+					outfile.put( (char)(c.to_ulong()) );
 				}
-				outfile.put( (char)(c.to_ulong()) );
 			}
 		} else {
-			outlnend("error writing file");
+			outlnend("error writing file"); //never runs?
 		}
 		outfile.close();
 	}

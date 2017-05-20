@@ -1,5 +1,5 @@
 #include "compress.h"
-#include "cache.h"
+//#include "cache.h" //cache.h doesn't compile
 //#include "dynamic_bitset.h"
 
 //room for the compression algorithm and other classes
@@ -12,12 +12,12 @@ int main() {
 	//outf("Type: *\n", mp3File.type);
 	//outf("Size: * bytes\n", mp3File.length);
 	//*/
-
 	//*
 	File txtFile("Ideas.txt");
 	outf("Name: *\n", txtFile.name);
 	outf("Type: *\n", txtFile.type);
 	outf("Size: * bytes\n", txtFile.length);
+	txtFile.close();
 	//*/
 
 	/*
@@ -27,7 +27,7 @@ int main() {
 	outlnend("");
 	return 0;
 	//*/
-	txtFile.close();
+	
 	/*
 	bitstring seed; //the seed bitstring
 	seed.push_back(true);

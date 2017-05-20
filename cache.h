@@ -22,7 +22,7 @@ public:
 	Cache(File a) : t(a) {}
 	Cache() {}
 	
-	bool areEqual(bitstring a, bitstring b) {
+	bool areEqual(bitstring a, bitstring b) { //just use the vector ==, it does exactly what this function does
 		if (a.size()!=b.size()) return false;
 		for (int i = 0; i<a.size(); i++) {
 			if (a[i]!=b[i]) return false;
@@ -38,8 +38,8 @@ public:
 	}
 	bool contains(File a, bitstring sub) {
 		if (a.length<sub.size()) return false;
-		for (int i = 0; i<a.length; i++) {
-			if (a[i]==sub[i] && a[i+1]==sub[i+1]) {
+		for (int i = 0; i<a.length; i++) { //a.length is the length of the file in bytes, use File.binary.size() to get size of binary
+			if (a[i]==sub[i] && a[i+1]==sub[i+1]) { //use File.binary[i] to access bits of the file
 				if (areEqual(a.substr(i,i+sub.size()), sub)) return true;
 			}
 		}

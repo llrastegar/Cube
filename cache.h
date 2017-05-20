@@ -21,28 +21,35 @@ public:
 	File t;
 	Cache(File a) : t(a) {}
 	Cache() {}
-	
-	bool areEqual(bitstring a, bitstring b) { //just use the vector ==, it does exactly what this function does
+	bool areEqual(bitstring a, bitstring b) {
 		if (a.size()!=b.size()) return false;
 		for (int i = 0; i<a.size(); i++) {
 			if (a[i]!=b[i]) return false;
 		}
 		return true;
 	}
-	unsigned long getNumReps(File t, bitstring find) {
-		int count = 0;
+	unsigned long getNumReps(File t, bitstring find) { //revise to use bitstring t
+		int count = -1;
 		for (int i = 0; i<t.length; i+=find.size()) {
 			if (areEqual(t.substr(i, i+9), find)) count++;
 		}
-		return count;
+		return count + 1;
 	}
-	bool contains(File a, bitstring sub) {
+	bool contains(File a, bitstring sub) { //revise to use bitstring t
 		if (a.length<sub.size()) return false;
-		for (int i = 0; i<a.length; i++) { //a.length is the length of the file in bytes, use File.binary.size() to get size of binary
-			if (a[i]==sub[i] && a[i+1]==sub[i+1]) { //use File.binary[i] to access bits of the file
+		for (int i = 0; i<a.length; i++) {
+			if (a[i]==sub[i] && a[i+1]==sub[i+1]) {
 				if (areEqual(a.substr(i,i+sub.size()), sub)) return true;
 			}
 		}
 		return false;
+	}
+	void fillAllVectors() {
+		for (int i = 0; i<t.length; i+=8) {
+			bitstring find = t.substr(i,i+9);
+			int reps = getNumReps(t, find);
+			numrepeats.push_back(reps);
+			eightbitcombinations.push_back(find);
+		}
 	}
 };

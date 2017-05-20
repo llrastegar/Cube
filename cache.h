@@ -13,43 +13,45 @@ bit strings.
 
 */
 
-class Cache {
+bool compareBitstrings(bitstring one, bitstring two) {
+	if (one.size()!=two.size()) return false;
+	for (int i = 0; i<one.size(); i++) {
+		if (one[i]!=two[i]) return false;
+	}
+	return true;
+}
+
+class EntryPair {
 public:
-	std::vector<bitstring> eightbitcombinations;
-	std::vector<int> numrepeats;
-	std::vector<bitstring> nbitkeys;
-	File t;
-	Cache(File a) : t(a) {}
-	Cache() {}
-	bool areEqual(bitstring a, bitstring b) {
-		if (a.size()!=b.size()) return false;
+	bitstring a;
+	bitstring b;
+	bool operator == (const EntryPair &com) {
+		return compareBitstrings(a, com.a) && compareBitstrings(b, com.b);
+	}
+	bool operator |= (const EntryPair &com) {
+		return (compareBitstrings(a, com.a) && compareBitstrings(b, com.b)) || (compareBitstrings(a, com.b) && compareBitstrings(b, com.a));
+	}
+	bitstring getFullBitstring(bool ord=true, bool id=false) {
+		bitstring resultant;
+		resultant.push_back(ord); resultant.push_back(id);
 		for (int i = 0; i<a.size(); i++) {
-			if (a[i]!=b[i]) return false;
+			resultant.push_back(a[i]);
 		}
-		return true;
-	}
-	unsigned long getNumReps(File t, bitstring find) { //revise to use bitstring t
-		int count = -1;
-		for (int i = 0; i<t.length; i+=find.size()) {
-			if (areEqual(t.substr(i, i+9), find)) count++;
+		for (int i = 0; i<b.size(); i++) {
+			resultant.push_back(b[i]);
 		}
-		return count + 1;
-	}
-	bool contains(File a, bitstring sub) { //revise to use bitstring t
-		if (a.length<sub.size()) return false;
-		for (int i = 0; i<a.length; i++) {
-			if (a[i]==sub[i] && a[i+1]==sub[i+1]) {
-				if (areEqual(a.substr(i,i+sub.size()), sub)) return true;
-			}
-		}
-		return false;
-	}
-	void fillAllVectors() {
-		for (int i = 0; i<t.length; i+=8) {
-			bitstring find = t.substr(i,i+9);
-			int reps = getNumReps(t, find);
-			numrepeats.push_back(reps);
-			eightbitcombinations.push_back(find);
-		}
+		return resultant;
 	}
 };
+
+struct Key {
+	bitstring key;
+	EntryPair ab;
+	EntryPair cd;
+	bool first_second;
+	Key() {}
+	Key(bitstring k, EntryPair a, EntryPair c) : key(k), ab(a), cd(c) {}
+};
+
+
+

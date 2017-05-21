@@ -1,6 +1,4 @@
 #include "compress.h"
-#include "cache.h" //cache.h doesn't compile
-//#include "dynamic_bitset.h"
 
 //room for the compression algorithm and other classes
 

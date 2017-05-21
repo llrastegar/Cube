@@ -25,6 +25,20 @@ int main() {
 								for (int m = 0; m<8; m++) {
 									if (m!=k && m!=j && m!=i && m!=l) {
 										a[m] = '1';
+										for (int n = 0; n<8; n++) {
+											if (n!=k && n!=j && n!=i && n!=l && n!=m) {
+												a[n] = '1';
+												for (int o = 0; o<8; o++) {
+													if (o!=k && o!=j && o!=i && o!=l && o!=m && o!=n) {
+														a[o] = '1';
+														outln(a);
+														a[o] = '0';
+													}
+												}
+												outln(a);
+												a[n] = '0';
+											}
+										}
 										outln(a);
 										a[m] = '0';
 									}
@@ -41,7 +55,6 @@ int main() {
 				a[j]='0';
 			}
 		}
-		
 		a[i]='0';
 	}
 }

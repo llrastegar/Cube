@@ -20,8 +20,6 @@ public:
 	bool isCompressed;
 	File() : name(""), type(""), isCompressed(false){}
 	/*TODO:
-		make issue for Lucas to solve
-		read in for compressed files
 		make a header file that holds all possible keys
 	*/
 	bitstring substr(long start){
@@ -122,7 +120,7 @@ public:
 	void extract(){
 		if(!isCompressed) return;
 		isCompressed = false;
-		name = name.substr(0, name.find_last_of(".compress")-8);
+		name = name.substr(0, name.rfind(".compress"));
 		type = name.substr(name.find_last_of(".") + 1);
 	}
 	void open(String filename) {
@@ -175,6 +173,7 @@ public:
 		} else {
 			outln("File " + name + " not found");
 			type = "";
+			extrabits = 0;
 		}
 		file.close();
 	}
@@ -203,8 +202,6 @@ public:
 					for(int i = binary.size() % 8; i < 8; i++){
 						c.set(7 - i, false);
 					}
-					outf("extra * bits in file", extrabits);
-					outlnend();
 				}
 			} else {
 				outlnend("error writing file"); //never runs?

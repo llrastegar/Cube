@@ -1,13 +1,33 @@
-#include "hardcodegen.h"
-
+//#include "hardcodegen.h"
+#include "file.h"
 //room for the compression algorithm and other classes
 
 
 int main() {
-	/*File mp3File("sound.mp3");
-	outf("Name: ", mp3File.name);
-	outf("Type: ", mp3File.type);
-	outf("Size: * bytes", mp3File.length);*/
+	/*File mp3File;
+	mp3File.open("sound.mp3");
+	outf("Name: *\n", mp3File.name);
+	outf("Type: *\n", mp3File.type);
+	outf("Size: * bytes\n", mp3File.binary.size() / 8);
+	outln();
+	*/
+	File txtFile;
+	txtFile.open("Ideas.txt.compress");
+	txtFile.stats();
+	//txtFile.extract();
+
+	txtFile.stats();
+	txtFile.extract();
+	txtFile.stats();
+	
+	txtFile.close();
+	return 0;
+
+	txtFile.compress();
+	txtFile.stats();
+	//txtFile.print();
+	//txtFile.close();
+	/*
 	mapTokeymap(keymap);
 	String a = "00000000";
 	outln(a);
@@ -31,30 +51,31 @@ int main() {
 												for (int o = 0; o<8; o++) {
 													if (o!=k && o!=j && o!=i && o!=l && o!=m && o!=n) {
 														a[o] = '1';
-														outln(a);
+														outlnend(a);
 														a[o] = '0';
 													}
 												}
-												outln(a);
+												outlnend(a);
 												a[n] = '0';
 											}
 										}
-										outln(a);
+										outlnend(a);
 										a[m] = '0';
 									}
 								}
-								outln(a);
+								outlnend(a);
 								a[l] = '0';
 							}
 						}
-						outln(a);
+						outlnend(a);
 						a[k] = '0';
 					}
 				}
-				outln(a);
+				outlnend(a);
 				a[j]='0';
 			}
 		}
 		a[i]='0';
 	}
+	*/
 }

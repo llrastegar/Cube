@@ -1,18 +1,14 @@
 #include "debug_utils.h"
-#include "fileheader.h"
 #include <fstream> //file io
 #include <vector>
 #include <bitset>
 #pragma once
+
 typedef std::string String;
 typedef std::vector<bool> bitstring;
 
 class File {
-private:
-	//fileIO
-	std::ifstream file;
-	std::ofstream outfile;
-	//header
+public: //switch to private after debug
 	short extrabits;
 public:
 	/*
@@ -20,37 +16,14 @@ public:
 	*/
 	String name; //path to file (name)
 	String type; //file extension
-	unsigned long length; //# of chars in file
 	bitstring binary; //binary contents of the file
-
-	File() : name(""), length(0), type(""){}
-
-	File(String fname) : name(fname) {
-		/*TODO:
-			make issue for Lucas to solve
-			read in for compressed files
-			make a header file that holds all possible keys
-
-		*/
-		//open file with cursor at the end (ate)
-		file.open(name.c_str(), std::ios::in|std::ios::ate);
-		if( file.is_open() ){
-			type = name.substr(name.find_last_of(".") + 1);
-			length = file.tellg();
-			file.seekg(0, std::ios::beg);
-			char c;
-			while( file.get(c) ){
-				for(int b = 0; b < 8; b++){
-					binary.push_back(c >> (7 - b) & 1);
-				}
-			}
-		} else {
-			outln("File " + name + " not found");
-			length = 0;
-			type = "";
-		}
-		file.close();
-	}
+	bool isCompressed;
+	File() : name(""), type(""), isCompressed(false){}
+	/*TODO:
+		make issue for Lucas to solve
+		read in for compressed files
+		make a header file that holds all possible keys
+	*/
 	bitstring substr(long start){
 		return bitstring(binary.begin()+start, binary.end());
 	}
@@ -70,7 +43,7 @@ public:
 	bool has2(bitstring b){
 		bool first = false;
 		for(long i = 0; i < binary.size() - b.size(); i++){
-			if( substr(i, i + b.size()) == b ){ //== checks length then members of a vector for equality
+			if( substr(i, i + b.size()) == b ){ //== checks size then members of a vector for equality
 				if(first)
 					return true;
 				first = true;
@@ -121,9 +94,18 @@ public:
 		}
 		return bits;
 	}
+	void stats(){
+		outln("File:");
+		outf("\tName: *\n", name);
+		outf("\tType: *\n", type);
+		outf("\tSize: * bytes\n", binary.size() / 8);
+		outf("\tExtrabits: * bits", extrabits);
+		outln();
+	}
 	void print(){
+		if(isCompressed) return;
 		std::bitset<8> c;
-		for(unsigned long i = 0; i < length; i++){
+		for(unsigned long i = 0; i < binary.size() / 8; i++){
 			for(int j = 0; j < 8; j++){
 				c.set(7 - j, binary[i * 8 + j]);
 			}
@@ -131,17 +113,57 @@ public:
 		}
 		outlnend("");
 	}
+	void compress(){
+		if(isCompressed) return;
+		isCompressed = true;
+		name += ".compress";
+		type = "compress";
+	}
+	void extract(){
+		if(!isCompressed) return;
+		isCompressed = false;
+		name = name.substr(0, name.find_last_of(".compress")-8);
+		type = name.substr(name.find_last_of(".") + 1);
+	}
 	void open(String filename) {
+		std::ifstream file;
+		binary.clear();
 		name = filename;
 		//open file with cursor at the end (ate)
 		file.open(name.c_str(), std::ios::in|std::ios::ate);
 		if( file.is_open() ){
 			type = name.substr(name.find_last_of(".") + 1);
 			if(type == "compress"){
-				outln("you opened a compressed file");
-				//TODO: read in the compressed file
+				isCompressed = true;
+				//outln("you opened a compressed file");
+				file.seekg(0, std::ios::beg);
+				char c;
+				//read header
+				if(file.get(c)){
+					extrabits = 0;
+					extrabits |= c >> 7 & 1;
+					extrabits << 1;
+					extrabits |= c >> 6 & 1;
+					extrabits << 1;
+					extrabits |= c >> 5 & 1;
+					//use extra 5 bits as a check that the data is a compressed format?
+				} else {
+					outln("WARNING: Empty Compressed File");
+				}
+				//read in actual data
+				while( file.get(c) ){
+					for(int b = 0; b < 8; b++){
+						binary.push_back(c >> (7 - b) & 1);
+					}
+				}
+				//remove extra bits from end
+				for(short i=0; i < extrabits; i++){
+					binary.pop_back();
+				}
+
 			} else {
-				length = file.tellg();
+				extrabits = 0;
+				outln("you opened a normal file");
 				file.seekg(0, std::ios::beg);
 				char c;
 				while( file.get(c) ){
@@ -152,39 +174,57 @@ public:
 			}
 		} else {
 			outln("File " + name + " not found");
-			length = 0;
 			type = "";
 		}
 		file.close();
 	}
 	void close(){ //write the file to storage, will create new file if none exists
-		outfile.open(name + ".compress", std::ofstream::out);
-		if( outfile.is_open() ){
-			std::bitset<8> c;
-			extrabits = binary.size() % 8;
-			//write file header, first 3 bits are the extra bits, next 5 are unused
-			c.set(7, extrabits >> 2 & 1);
-			c.set(6, extrabits >> 1 & 1);
-			c.set(5, extrabits & 1);
-			outfile.put( (char)(c.to_ulong()) );
-			//write data to file
-			for(unsigned long long i = 0; i < binary.size(); i++) {
-				c.set(7 - (i % 8), binary[i]);
-				if(i % 8 == 7) {
-					outfile.put( (char)(c.to_ulong()) );
+		std::ofstream outfile;
+		if(isCompressed){ //write a compressed file if file isCompressed
+			outfile.open(name, std::ofstream::out);
+			if( outfile.is_open() ){
+				std::bitset<8> c;
+				extrabits = binary.size() % 8;
+				//write file header, first 3 bits are the extra bits, next 5 are unused
+				c.set(7, extrabits >> 2 & 1);
+				c.set(6, extrabits >> 1 & 1);
+				c.set(5, extrabits & 1);
+				outfile.put( (char)(c.to_ulong()) );
+				//write data to file
+				for(unsigned long long i = 0; i < binary.size(); i++) {
+					c.set(7 - (i % 8), binary[i]);
+					if(i % 8 == 7) {
+						outfile.put( (char)(c.to_ulong()) );
+					}
 				}
-			}
-			//write extra bits
-			if(binary.size() % 8 != 0){
-				//set remaining bits in c to zero and write to file
-				for(int i = binary.size() % 8; i < 8; i++){
-					c.set(7 - i, false);
+				//write extra bits
+				if(binary.size() % 8 != 0){
+					//set remaining bits in c to zero and write to file
+					for(int i = binary.size() % 8; i < 8; i++){
+						c.set(7 - i, false);
+					}
+					outf("extra * bits in file", extrabits);
+					outlnend();
 				}
-				outf("extra * bits in file", extrabits);
-				outlnend();
+			} else {
+				outlnend("error writing file"); //never runs?
 			}
 		} else {
-			outlnend("error writing file"); //never runs?
+			outfile.open(name, std::ofstream::out);
+			if( outfile.is_open() ){
+				std::bitset<8> c;
+				//write no header
+				//write data to file
+				for(unsigned long long i = 0; i < binary.size(); i++) {
+					c.set(7 - (i % 8), binary[i]);
+					if(i % 8 == 7) {
+						outfile.put( (char)(c.to_ulong()) );
+					}
+				}
+				//don't write extra bits
+			} else {
+				outlnend("error writing file"); //never runs?
+			}
 		}
 		outfile.close();
 	}

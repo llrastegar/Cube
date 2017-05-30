@@ -6,7 +6,21 @@
 
 typedef std::string String;
 typedef std::vector<bool> bitstring;
-
+int to_int(bitstring b){
+	int result = 0;
+	for(int i = 0; i < b.size(); i++){
+		result |= b[i];
+		result << 1;
+	}
+	return result;
+};
+bitstring from_int(int n){
+	bitstring b;
+	for(int i = 0; i < 32; i++){
+		b.push_back(n >> (31 - b) & 1);
+	}
+	return b;
+};
 class File {
 public: //switch to private after debug
 	short extrabits;

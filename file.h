@@ -17,7 +17,7 @@ int to_int(bitstring b){
 bitstring from_int(int n){
 	bitstring b;
 	for(int i = 0; i < 32; i++){
-		b.push_back(n >> (31 - b) & 1);
+		b.push_back(n >> (31 - i) & 1);
 	}
 	return b;
 };

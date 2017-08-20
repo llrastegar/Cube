@@ -8,14 +8,15 @@ int main(int argc, char const *argv[])
 {
 	
 	File2 f("Ideas.txt");
-	//cout << f.bytes << endl;
+	
 	for(int i=0; i < f.size(); i++)
 		cout << f[i];
+	//show some space between outputs
 	cout << endl;
-	
-	f.set(f.size() - 1, true);
+	cout << endl;
+	//resize file, adding 1000 additional bits
+	f.resize(f.size() + 1000);
 
-	//cout << f.bytes << endl;
 	for(int i=0; i < f.size(); i++)
 		cout << f[i];
 	cout << endl;

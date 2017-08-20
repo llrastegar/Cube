@@ -47,6 +47,36 @@ public:
 	~File2(){
 		delete[] bytes;
 	}
+	//WARNING
+	//this funcion will remove any data that extends the resize length
+	void resize(unsigned long long len){
+		//store len for later
+		long long new_len = len;
+		//set len to len of data in bytes
+		if (len % 8 > 0){
+			len = len / 8 + 1;
+		} else {
+			len = len / 8;
+		}
+		//set length to length of data in bytes
+		if (length % 8 > 0){
+			length = length / 8 + 1;
+		} else {
+			length = length / 8;
+		}
+		//make a new array of correct size
+		char * temp;
+		temp = new char[len];
+		//fill new array
+		for(unsigned long i = 0; i < length; i++){
+			temp[i] = bytes[i];
+		}
+		//remove old data
+		delete[] bytes;
+		//set pointer to new data
+		length = new_len;
+		bytes = temp;
+	}
 	//returns file size in bits
 	unsigned long long size(){
 		return length;

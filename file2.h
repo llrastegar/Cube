@@ -8,6 +8,8 @@ is stored(eg not using a byte in order to store a single bit)
 #include <stdexcept>
 #pragma once
 
+typedef unsigned long long lengthtype;
+
 void OutofBounds(long long i){
 	throw std::invalid_argument("Index " + std::to_string(i) +" Out of Bounds");
 };
@@ -16,7 +18,7 @@ class File2
 public: //switch to private after debug is done
 	char* bytes;
 	const char* name;
-	unsigned long long length; //length of file in bits
+	lengthtype length; //length of file in bits
 public:
 	File2(){
 		length = 0;
@@ -30,7 +32,7 @@ public:
 		file.open(name, std::ios::in | std::ifstream::ate);
 		if( file.is_open() ){
 			//get the length and setup memory
-			length = (long long)file.tellg() * 8;
+			length = (lengthtype)file.tellg() * 8;
 			bytes = new char[ file.tellg() ];
 			//read the file to memory
 			file.seekg(0, std::ios::beg);
@@ -47,49 +49,51 @@ public:
 	~File2(){
 		delete[] bytes;
 	}
-	//WARNING
+	//WARNING:
 	//this funcion will remove any data that extends the resize length
-	void resize(unsigned long long len){
-		//store len for later
-		long long new_len = len;
-		//set len to len of data in bytes
-		if (len % 8 > 0){
-			len = len / 8 + 1;
-		} else {
-			len = len / 8;
-		}
-		//set length to length of data in bytes
+	void resize(lengthtype len){
+		//get old length of data
+		lengthtype old_length_in_bytes = length / 8;
+		//check if length extends past a multiple of 8
 		if (length % 8 > 0){
-			length = length / 8 + 1;
-		} else {
-			length = length / 8;
+			old_length_in_bytes++;
 		}
+
+		//set length to new length
+		length = len;
+
+		//get new length in bytes
+		lengthtype length_in_bytes = length / 8;
+		//if the length is not a multiple of 8, add one to fit data
+		if (length % 8 > 0){
+			length_in_bytes++;
+		}
+
 		//make a new array of correct size
 		char * temp;
-		temp = new char[len];
+		temp = new char[length_in_bytes];
 		//fill new array
-		for(unsigned long i = 0; i < length; i++){
+		for(lengthtype i = 0; i < old_length_in_bytes; i++){
 			temp[i] = bytes[i];
 		}
 		//remove old data
 		delete[] bytes;
 		//set pointer to new data
-		length = new_len;
 		bytes = temp;
 	}
 	//returns file size in bits
-	unsigned long long size(){
+	lengthtype size(){
 		return length;
 	}
 	//return bit at i in file
-	bool operator[](unsigned long long i) const {
+	bool operator[](lengthtype i) const {
 		if(i >= length){
 			OutofBounds(i);
 		}
 		return ( bytes[i / 8] >> (7 - (i % 8)) ) & 0x1;
 	}
 	//set bit i in file to state
-	void set(unsigned long long i, bool state = false){
+	void set(lengthtype i, bool state = false){
 		if(i >= length){
 			OutofBounds(i);
 		}

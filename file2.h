@@ -36,7 +36,7 @@ public:
 			bytes = new char[ file.tellg() ];
 			//read the file to memory
 			file.seekg(0, std::ios::beg);
-			long i = 0;
+			lengthtype i = 0;
 			while(file.get(bytes[i])){
 				i++;
 			}
@@ -45,6 +45,28 @@ public:
 		}
 		//always close the file
 		file.close();
+	}
+	void close(std::string fname){
+		std::ofstream file;
+		file.open(fname.c_str(), std::ios::out);
+		if( file.is_open() ){
+			//write data to file
+			lengthtype length_in_bytes = length / 8;
+			//if the length is not a multiple of 8, add one to fit data
+			if (length % 8 > 0){
+				length_in_bytes++;
+			}
+			for(lengthtype i = 0; i < length_in_bytes; i++){
+				file.put(bytes[i]);
+			}
+		} else {
+			throw std::runtime_error("Error Writing file");
+		}
+		//always close the file
+		file.close();
+	}
+	void close(){
+		close((std::string)name);
 	}
 	~File2(){
 		delete[] bytes;

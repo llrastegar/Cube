@@ -15,10 +15,12 @@ int main(int argc, char const *argv[])
 	cout << endl;
 	cout << endl;
 	//resize file, adding 1000 additional bits
-	f.resize(f.size() + 1000);
+	//f.resize(f.size() - 8);
 
 	for(int i=0; i < f.size(); i++)
 		cout << f[i];
 	cout << endl;
+
+	f.close("test.txt");
 	return 0;
 }

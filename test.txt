@@ -1,0 +1,47 @@
+Full list of ideas so far for the grand Cube project, whatever that is.
+
+	-- A compression algorithm that compresses down files that are not used often on your computer,
+	freeing up more disk space and reducing clutter.
+	-- Could morph into an algorithm that also sorts and organizes your files for you
+	-- Ultimately could turn into a cloud service.
+	
+	
+So far, we have come up with the following for the algorithm:
+	--Concatenate everything into a very long string s with length n.
+	--Iterate through the string 9, 10, 11, ... n bytes at a time. Save any often recurring patterns into a register,
+		and then use a yet-to-be-designed scoring algorithm to determine which number of bytes
+		does the best job of compressing the data. Assign a character value (8 bits) to any of these
+		often recurring non-overlapping strings of binary. In case different start-points or gaps between strings
+		produce different results, set up several caches to store the data needed for the compression function.
+	--To compress everything, the output will be saved in a txt file with a certain key for each character and the length
+		of bit string each character represents.
+	--Do this recursively so that more new characters are needed to substitute for old ones. Make sure to document all this
+		in keys so that the decompression function can read it. Some sort of threshold for the optimal level of recursion
+		will have to be implemented.
+	--As we begin crunching more data, more characters and patterns will become obvious, to the point that we could
+		hardcode certain things into the dictionary that pairs characters with full bit strings.
+Compression Algo ideas:
+	----idea:
+			go through file and check for a binary string equal to that of the id
+			for each found string compare the bits coming after and push that into the key value
+			remove the common bits after each id string, leaving the id bits in for decompress
+		drawbacks:
+			only works if there is a significant amount of data in common after each id
+			and that the id repeats often
+	----idea:
+		drawbacks:
+To-Do:
+	Come up with the scoring mechanism
+	Come up with the optimal recursion threshold
+	Come up with the best way to store keys in files--this takes memory too!
+	
+	
+	
+	
+Scoring mechanism:
+	Consider a cache of the total amount of different non-overlapping patterns that were recorded. Call this amount p.
+	Consider the amount of times each pattern is recorded, r_i, where is i the index.
+	Then the scoring function must be:
+	(Sum from i = 1 to p of r_i) / p - (p/file_length)
+	Explanation: We sum up the total amount of repetitions of patterns and divide it by p to find the most amount of repetitions
+		relatively little patterns. Then we make sure that the file size compensates for large p in the subtracted term.
